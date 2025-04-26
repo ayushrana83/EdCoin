@@ -21,7 +21,7 @@ const Navbar = () => {
               </div>
             </a>
             <a href="/" className="text-white text-xl font-bold ml-3">
-              GeuCoin
+              EdCoin
             </a>
           </div>
 
