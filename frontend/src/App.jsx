@@ -3,6 +3,8 @@ import WalletConnect from './components/WalletConnet'
 import Navbar from './components/Navbar'
 import EdCoinDashboard from './components/EdCoinsApp'
 import Home from './components/Home'
+import Login from './components/Login'
+import SignUp from './components/SignUp'
 
 function App() {
   return (
@@ -12,7 +14,9 @@ function App() {
       {/* <WalletConnect/> */}
       {/* </div> */}
       {/* <EdCoinDashboard/> */}
-      <Home/>
+      {/* <Home/> */}
+      {/* <Login/> */}
+      <SignUp/>
     </div>
   )
 }

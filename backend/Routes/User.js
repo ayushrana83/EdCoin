@@ -1,11 +1,12 @@
 const express = require("express");
-import { loginController, logoutController, signUpController } from "../Controller/User";
+const { loginController, logoutController, signUpController, walletInfoController } = require("../Controller/User");
 const router = express.Router();
 
 
-router.route("/login").get(loginController);
-router.route("/signup").post(signUpController);
-router.route("/logout").post(logoutController);
+router.get("/login" ,loginController);
+router.post("/signup" , signUpController);
+router.post("/logout" , logoutController);
+router.get("/walletinfo" , walletInfoController);
 
 
-export default router;
+module.exports = router;
