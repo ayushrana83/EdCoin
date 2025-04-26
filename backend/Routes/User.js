@@ -3,7 +3,7 @@ const { loginController, logoutController, signUpController, walletInfoControlle
 const router = express.Router();
 
 
-router.get("/login" ,loginController);
+router.post("/login" ,loginController);
 router.post("/signup" , signUpController);
 router.post("/logout" , logoutController);
 router.get("/walletinfo" , walletInfoController);

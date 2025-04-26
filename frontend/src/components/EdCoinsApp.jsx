@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Trophy, Book, Calendar, Gift, Award, BarChart, User, Bell, LogOut } from 'lucide-react';
+import { useUser } from '../Context/User';
+import { useNavigate } from 'react-router-dom';
 
 export default function EdCoinDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  
   const userData = {
     name: "Alex Johnson",
     profileImage: "/api/placeholder/80/80",
@@ -25,6 +26,10 @@ export default function EdCoinDashboard() {
     ]
   };
 
+  
+  const {user} = useUser();
+  const navigate = useNavigate();
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -41,37 +46,19 @@ export default function EdCoinDashboard() {
             icon={<BarChart />} 
             text="Dashboard" 
             active={activeTab === "dashboard"} 
-            onClick={() => setActiveTab("dashboard")} 
+            onClick={() => navigate("/home")} 
           />
           <SidebarLink 
             icon={<Gift />} 
             text="Rewards" 
             active={activeTab === "rewards"} 
-            onClick={() => setActiveTab("rewards")} 
-          />
-          <SidebarLink 
-            icon={<Award />} 
-            text="Achievements" 
-            active={activeTab === "achievements"} 
-            onClick={() => setActiveTab("achievements")} 
+            onClick={() => navigate("/rewards")} 
           />
           <SidebarLink 
             icon={<Book />} 
             text="Activities" 
             active={activeTab === "activities"} 
-            onClick={() => setActiveTab("activities")} 
-          />
-          <SidebarLink 
-            icon={<Calendar />} 
-            text="Events" 
-            active={activeTab === "events"} 
-            onClick={() => setActiveTab("events")} 
-          />
-          <SidebarLink 
-            icon={<User />} 
-            text="Profile" 
-            active={activeTab === "profile"} 
-            onClick={() => setActiveTab("profile")} 
+            onClick={() => navigate("/activity")} 
           />
         </nav>
       </div>
@@ -86,7 +73,6 @@ export default function EdCoinDashboard() {
               <Bell size={20} />
             </button>
             <div className="flex items-center">
-              <img src={userData.profileImage} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
               <span className="mr-4">{userData.name}</span>
             </div>
             <button className="p-2 rounded-full hover:bg-gray-100">
@@ -103,7 +89,7 @@ export default function EdCoinDashboard() {
               <h3 className="text-gray-500 text-sm mb-2">Total EdCoins</h3>
               <div className="flex items-center">
                 <Trophy className="text-yellow-500 mr-2" size={24} />
-                <span className="text-3xl font-bold">{userData.totalCoins}</span>
+                <span className="text-3xl font-bold">{500}</span>
               </div>
             </div>
             
@@ -111,20 +97,20 @@ export default function EdCoinDashboard() {
               <h3 className="text-gray-500 text-sm mb-2">Current Rank</h3>
               <div className="flex items-center">
                 <Award className="text-blue-500 mr-2" size={24} />
-                <span className="text-3xl font-bold">{userData.rank}</span>
+                <span className="text-3xl font-bold">{userData?.rank}</span>
               </div>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-gray-500 text-sm mb-2">Next Rank Progress</h3>
               <div className="mb-2">
-                <span className="text-sm">{userData.nextRank}</span>
-                <span className="text-xs text-gray-500 float-right">{userData.totalCoins}/{userData.coinsForNextRank}</span>
+                <span className="text-sm">{userData?.nextRank}</span>
+                <span className="text-xs text-gray-500 float-right">{userData?.totalCoins}/{userData?.coinsForNextRank}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div 
                   className="bg-slate-600 h-2.5 rounded-full" 
-                  style={{ width: `${(userData.totalCoins / userData.coinsForNextRank) * 100}%` }}
+                  style={{ width: `${(userData?.totalCoins / userData?.coinsForNextRank) * 100}%` }}
                 ></div>
               </div>
             </div>
@@ -139,7 +125,7 @@ export default function EdCoinDashboard() {
                 Recent Activity
               </h3>
               <div className="space-y-4">
-                {userData.recentActivities.map(activity => (
+                {userData?.recentActivities.map(activity => (
                   <div key={activity.id} className="flex justify-between items-center border-b pb-2">
                     <div>
                       <p className="font-medium">{activity.activity}</p>
@@ -161,7 +147,7 @@ export default function EdCoinDashboard() {
                 Available Rewards
               </h3>
               <div className="space-y-4">
-                {userData.availableRewards.map(reward => (
+                {userData?.availableRewards.map(reward => (
                   <div key={reward.id} className="border rounded-lg p-3 hover:bg-gray-50 transition cursor-pointer">
                     <div className="flex justify-between items-center">
                       <h4 className="font-medium">{reward.name}</h4>
@@ -172,11 +158,11 @@ export default function EdCoinDashboard() {
                     <p className="text-sm text-gray-500 mt-1">{reward.description}</p>
                     <button 
                       className={`mt-2 text-sm px-3 py-1 rounded ${
-                        userData.totalCoins >= reward.cost
+                        userData?.totalCoins >= reward.cost
                           ? "bg-slate-600 text-white hover:bg-slate-700"
                           : "bg-gray-300 text-gray-600 cursor-not-allowed"
                       }`}
-                      disabled={userData.totalCoins < reward.cost}
+                      disabled={userData?.totalCoins < reward.cost}
                     >
                       Redeem
                     </button>

@@ -1,20 +1,9 @@
 import { useState, useEffect } from "react";
-import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 
-const WalletConnect = ({setKey}) => {
+const WalletConnect = ({ setKey }) => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState(null);
-
-  const helper = (e) => {
-    e.preventDefault();
-    walletOptions;
-  }
-
-  const helper2 = (e , caller) => {
-    e.preventDefault();
-    caller();
-  }
 
   const walletOptions = [
     {
@@ -27,16 +16,14 @@ const WalletConnect = ({setKey}) => {
             setWalletAddress(response.publicKey.toString());
             setShowOptions(false);
             setSelectedWallet("Phantom");
-            console.log("wallet =" ,walletAddress);
-            console.log("response ==" , response.publicKey.toString());
-            console.log(walletAddress);
+            console.log("wallet =", response.publicKey.toString());
           } catch (err) {
             console.error("Phantom wallet connection failed", err);
           }
         } else {
           window.open("https://phantom.app/", "_blank");
         }
-      }
+      },
     },
     {
       name: "Brave",
@@ -54,7 +41,7 @@ const WalletConnect = ({setKey}) => {
         } else {
           alert("Please enable Solana in Brave browser settings.");
         }
-      }
+      },
     },
     {
       name: "Backpack",
@@ -72,7 +59,7 @@ const WalletConnect = ({setKey}) => {
         } else {
           window.open("https://www.backpack.app/", "_blank");
         }
-      }
+      },
     },
     {
       name: "Solflare",
@@ -90,22 +77,20 @@ const WalletConnect = ({setKey}) => {
         } else {
           window.open("https://solflare.com/", "_blank");
         }
-      }
-    }
+      },
+    },
   ];
 
-  useEffect(()=>{
+  useEffect(() => {
     setKey(walletAddress);
-    console.log(walletAddress);
-  },[walletAddress])
+    console.log("Wallet Address Updated: ", walletAddress);
+  }, [walletAddress, setKey]);
 
-  // Function to toggle wallet options
   const toggleWalletOptions = (e) => {
     e.preventDefault();
     setShowOptions(!showOptions);
   };
 
-  // Function to disconnect wallet
   const disconnectWallet = (e) => {
     e.preventDefault();
     if (window.solana && selectedWallet === "Phantom") {
@@ -119,7 +104,6 @@ const WalletConnect = ({setKey}) => {
     setSelectedWallet(null);
   };
 
-  // Function to format wallet address for display
   const formatAddress = (address) => {
     if (!address) return "";
     return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
@@ -129,17 +113,22 @@ const WalletConnect = ({setKey}) => {
     <div className="relative">
       {walletAddress ? (
         <div>
-          <button onClick={(e) => disconnectWallet(e)} className="flex items-center rounded  text-white px-4 py-2 bg-green-400 text-left hover:bg-green-200 transition-colors">Wallet Connected</button>
+          <button
+            onClick={disconnectWallet}
+            className="flex items-center rounded text-white px-4 py-2 bg-green-400 text-left hover:bg-green-200 transition-colors"
+          >
+            Wallet Connected
+          </button>
         </div>
       ) : (
         <div className="relative">
-          <button 
-            onClick={(e) => toggleWalletOptions(e)} 
+          <button
+            onClick={toggleWalletOptions}
             className="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded flex items-center transition-colors"
           >
             Connect Wallet
           </button>
-          
+
           {showOptions && (
             <div className="absolute mt-2 w-64 bg-white rounded-md shadow-lg z-10 overflow-hidden">
               <div className="py-2">
@@ -149,7 +138,10 @@ const WalletConnect = ({setKey}) => {
                 {walletOptions.map((wallet, index) => (
                   <button
                     key={index}
-                    onClick={(e) => helper2(e , wallet.connect)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      wallet.connect();
+                    }}
                     className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-100 transition-colors"
                   >
                     <span className="text-xl mr-3">{wallet.icon}</span>

@@ -1,4 +1,4 @@
-const { User } = require("../Model/User");
+const User = require("../Model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { config } = require("dotenv");
@@ -11,36 +11,38 @@ const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
 const signUpController = async (req , res) => {
   try {
-    // console.log("signup");
-    const { email, password, confirmPassword } = req.body;
+    console.log("signup");
+    const { email, password, confirmPassword , publicKey } = req.body;
+    console.log(email , password , confirmPassword , publicKey);
     if (!email || !password || !confirmPassword) {
       res.status(404).json({ message: "all fields required" });
       return;
     }
+    console.log("signup");
     if(password !== confirmPassword)
-    {
-      res.status(400).json({ message: "Password does not Match" });
-      return;
-    }
-    const user = await User.findOne({ email });
-    if (user) {
-      res.status(400).json({ message: "email already used" });
-      return;
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword });
-    await newUser.save();
-    const token = jwt.sign({ userId: newUser._id }, process.env.SECRET_KEY, {
-      expiresIn: "1d",
-    });
-    res
-      .cookie("token", token, { httpOnly: true })
+      {
+        res.status(400).json({ message: "Password does not Match" });
+        return;
+      }
+      console.log("signup");
+      const user = await User.findOne({ email });
+      if (user) {
+        res.status(400).json({ message: "email already used" });
+        return;
+      }
+      console.log("signup");
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({ email, password: hashedPassword  , publicKey});
+      console.log("signup");
+      await newUser.save();
+      res
       .status(201)
       .json({ message: "user created successfully" });
     // console.log(res);
 
     return;
   } catch (error) {
+    console.log("Erorr signup" , error);
     res.status(400).json({ message: "error in signUpController", error });
     return;
   }
@@ -48,14 +50,16 @@ const signUpController = async (req , res) => {
 
 const loginController = async (req, res) => {
   try {
-    // console.log("login");
+    console.log("login");
     const { email, password } = req.body;
-    // console.log(req.body);
+    console.log(req.body);
     if (!email || !password) {
       res.status(400).json({ message: "all fields required" });
       return;
     }
+    console.log("SDFsdef");
     const user = await User.findOne({ email });
+    console.log("SDFsd");
     if (!user) {
       res.status(401).json({ message: "invalid credentials" });
       return;
@@ -65,11 +69,7 @@ const loginController = async (req, res) => {
       res.status(401).json({ message: "wrong password" });
       return;
     }
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "1d",
-    });
     res
-      .cookie("token", token, { httpOnly: true })
       .status(200)
       .json({ message: "login successfull" });
     // console.log(res);
@@ -82,7 +82,6 @@ const loginController = async (req, res) => {
 
 const logoutController = (req, res) => {
   try {
-    res.clearCookie("token");
     // console.log("logout")
     res.status(200).json({message : "logout succesfull" });
     return;
@@ -153,6 +152,9 @@ const walletInfoController = async (req, res) => {
     return res.status(500).json({ error: 'Error fetching wallet details' });
   }
 };
+
+
+
 
 
 

@@ -1,20 +1,32 @@
 import { useState } from 'react';
 import { Eye, EyeOff, User, Lock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../Context/User';
+import { Axios } from '../Axios';
+
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const handleSubmit = (e) => {
+  const {loginUser} = useUser();
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      alert(`Login attempt with email: ${email}`);
-    }, 1500);
+    try {
+      const response = await Axios.post("/user/login" , {email , password});
+      if(response)
+      {
+        navigate("/home");
+        loginUser(email , password);
+      }
+    } catch (error) {
+      console.log("Error" , error);
+      alert(error.response.data.message);
+    }
   };
 
   return (
@@ -96,9 +108,9 @@ export default function LoginForm() {
 
         <p className="mt-10 text-center text-sm text-slate-500">
           Not a member?{' '}
-          <a href="#" className="font-semibold leading-6 text-slate-600 hover:text-slate-500">
+          <Link to={"/signup"} className="font-semibold leading-6 text-slate-600 hover:text-slate-500">
             Create an account
-          </a>
+          </Link>
         </p>
       </div>
     </div>
