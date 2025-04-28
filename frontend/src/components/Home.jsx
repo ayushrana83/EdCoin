@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   const [email, setEmail] = useState('');
-
+  const {user} = "fd";
   const handleSubmit = (e) => {
     e.preventDefault();
     alert(`Thank you for your interest! We'll send updates to ${email}`);
@@ -39,9 +39,11 @@ export default function Home() {
         </div>
 
         <div>
-          <Link to={"/login"} className="bg-slate-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-700 transition-all duration-300">
+          {user ? <Link to={"/login"} className="bg-slate-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-700 transition-all duration-300">
             Log In
-          </Link>
+          </Link> : <button to={"/logout"} className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-all duration-300">
+            Log Out
+          </button>}
         </div>
       </nav>
 
@@ -70,7 +72,7 @@ export default function Home() {
             whileTap={{ scale: 0.95 }}
             className="bg-slate-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-slate-700 transition flex items-center gap-2"
           >
-            <Link to={"/login"}>Get Started</Link>
+            <Link to={"/home"}>Get Started</Link>
              <ChevronRight className="h-5 w-5" />
           </motion.button>
 

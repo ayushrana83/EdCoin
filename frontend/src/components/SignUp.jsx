@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, UserPlus } from 'lucide-react';
-import WalletConnect from "./WalletConnet";
+// import WalletConnect from "./WalletConnet";
 import { useNavigate } from 'react-router-dom'; 
 import { useUser } from '../Context/User';
 import { Axios } from '../Axios';
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [publicKey, setPublicKey] = useState(null);
+  // const [publicKey, setPublicKey] = useState(null);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {signUpUser} = useUser();
   const [formData, setFormData] = useState({
@@ -70,7 +70,7 @@ export default function SignupForm() {
       setLoading(true);
 
       try {
-        const newData = {...formData , publicKey};
+        const newData = {...formData};
         console.log(newData);
         const response = await Axios.post('/user/signup', newData);
         console.log(response);
@@ -226,7 +226,7 @@ export default function SignupForm() {
             {errors.confirmPassword && <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>}
           </div>
 
-          <WalletConnect setKey={setPublicKey} />
+          {/*<WalletConnect setKey={setPublicKey} />*/}
 
           {/* Submit Button */}
           <div>
