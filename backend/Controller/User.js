@@ -11,29 +11,29 @@ const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
 const signUpController = async (req , res) => {
   try {
-    console.log("signup");
+    // console.log("signup");
     const { email, password, confirmPassword , publicKey } = req.body;
-    console.log(email , password , confirmPassword , publicKey);
+    // console.log(email , password , confirmPassword , publicKey);
     if (!email || !password || !confirmPassword) {
       res.status(404).json({ message: "all fields required" });
       return;
     }
-    console.log("signup");
+    // console.log("signup");
     if(password !== confirmPassword)
       {
         res.status(400).json({ message: "Password does not Match" });
         return;
       }
-      console.log("signup");
+      // console.log("signup");
       const user = await User.findOne({ email });
       if (user) {
         res.status(400).json({ message: "email already used" });
         return;
       }
-      console.log("signup");
+      // console.log("signup");
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = new User({ email, password: hashedPassword  , publicKey});
-      console.log("signup");
+      // console.log("signup");
       await newUser.save();
       res
       .status(201)
@@ -50,16 +50,16 @@ const signUpController = async (req , res) => {
 
 const loginController = async (req, res) => {
   try {
-    console.log("login");
+    // console.log("login");
     const { email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     if (!email || !password) {
       res.status(400).json({ message: "all fields required" });
       return;
     }
-    console.log("SDFsdef");
+    // console.log("SDFsdef");
     const user = await User.findOne({ email });
-    console.log("SDFsd");
+    // console.log("SDFsd");
     if (!user) {
       res.status(401).json({ message: "invalid credentials" });
       return;
